@@ -11,6 +11,8 @@ import ma.enset.hospital.repository.RendezVousRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @Transactional
 public class HospitalServiceImplement implements IHospitalService{
@@ -38,6 +40,7 @@ public class HospitalServiceImplement implements IHospitalService{
 
     @Override
     public RendezVous saveRDV(RendezVous rendezVous) {
+        rendezVous.setId(UUID.randomUUID().toString());
         return rendezVousRepository.save(rendezVous);
     }
 

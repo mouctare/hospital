@@ -5,6 +5,8 @@ import ma.enset.hospital.repository.ConsultationRepository;
 import ma.enset.hospital.repository.MedecinRepository;
 import ma.enset.hospital.repository.PatientRepository;
 import ma.enset.hospital.repository.RendezVousRepository;
+import ma.enset.hospital.service.HospitalServiceImplement;
+import ma.enset.hospital.service.IHospitalService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,12 +24,7 @@ public class HospitalApplication {
 
 	@Bean
 	// Charge mo cette methode au demarrage
-	CommandLineRunner start(
-			PatientRepository patientRepository,
-			MedecinRepository medecinRepository,
-			RendezVousRepository rendezVousRepository,
-			ConsultationRepository consultationRepository
-	) {
+	CommandLineRunner start(IHospitalService hospitalService, PatientRepository patientRepository,RendezVousRepository rendezVousRepository, MedecinRepository medecinRepository) {
 		return args -> {
 			//patientRepository.save(new Patient(null, "Hassan", new Date(), false, null));
 
@@ -37,7 +34,7 @@ public class HospitalApplication {
 						patient.setNom(name);
 						patient.setDateNaissance(new Date());
 						patient.setMalade(false);
-						patientRepository.save(patient);
+						hospitalService.savePatient(patient);
 					});
 			Stream.of("aymane", "Hanane", "yasmine")
 					.forEach(name -> {
@@ -45,9 +42,10 @@ public class HospitalApplication {
 						medecin.setNom(name);
 						medecin.setEmail(name + "@gmail.com");
 						medecin.setSpecialite(Math.random() > 0.5 ? "Cardio" : "Dentiste");
-						medecinRepository.save(medecin);
+						hospitalService.saveMedecin(medecin);
 
 					});
+			//Patient patient = patientRepository.findById(1L).orElse(null);
 			Patient patient = patientRepository.findById(1L).orElse(null);
 			//	Patient patient1 = patientRepository.findByNom("Najat");
 
@@ -58,14 +56,14 @@ public class HospitalApplication {
 			rendezVous.setStatutsRDV(StatusRDV.PENDING);
 			rendezVous.setMedecin(medecin);
 			rendezVous.setPatient(patient);
-			rendezVousRepository.save(rendezVous);
+			hospitalService.saveRDV(rendezVous);
 
-			RendezVous rendezVous1 = rendezVousRepository.findById(1L).orElse(null);
+			RendezVous rendezVous1 = rendezVousRepository.findAll().get(0);
 			Consultation consultation = new Consultation();
 			consultation.setDateConsultation(new Date());
 			consultation.setRendezVous(rendezVous1);
 			consultation.setRapport("Rapport de consultation");
-			consultationRepository.save(consultation);
+			hospitalService.saveConsultation(consultation);
 
 		};
 	}
