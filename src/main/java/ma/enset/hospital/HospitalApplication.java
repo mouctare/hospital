@@ -27,29 +27,29 @@ public class HospitalApplication {
 			MedecinRepository medecinRepository,
 			RendezVousRepository rendezVousRepository,
 			ConsultationRepository consultationRepository
-	){
+	) {
 		return args -> {
 			//patientRepository.save(new Patient(null, "Hassan", new Date(), false, null));
 
 			Stream.of("Mohamed", "Hassan", "Najat")
-					.forEach(name->{
+					.forEach(name -> {
 						Patient patient = new Patient();
 						patient.setNom(name);
-						patient.setDateNaissance( new Date());
+						patient.setDateNaissance(new Date());
 						patient.setMalade(false);
 						patientRepository.save(patient);
 					});
 			Stream.of("aymane", "Hanane", "yasmine")
-					.forEach(name->{
+					.forEach(name -> {
 						Medecin medecin = new Medecin();
 						medecin.setNom(name);
-						medecin.setEmail(name+"@gmail.com");
-						medecin.setSpecialite(Math.random() > 0.5 ? "Cardio":"Dentiste");
+						medecin.setEmail(name + "@gmail.com");
+						medecin.setSpecialite(Math.random() > 0.5 ? "Cardio" : "Dentiste");
 						medecinRepository.save(medecin);
 
 					});
 			Patient patient = patientRepository.findById(1L).orElse(null);
-		//	Patient patient1 = patientRepository.findByNom("Najat");
+			//	Patient patient1 = patientRepository.findByNom("Najat");
 
 			Medecin medecin = medecinRepository.findByNom("yasmine");
 
